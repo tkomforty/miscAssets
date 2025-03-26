@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiscAssets Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-list li {
+            background-color: #f4f4f4;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-list li a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .file-list li a:hover {
+            text-decoration: underline;
+        }
+        .file-info {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>MiscAssets Directory</h1>
+    
+    <ul class="file-list">
+        <li>
+            <div>
+                <a href="gold_knight.glb">gold_knight.glb</a>
+                <br>
+                <span class="file-info">3D Model</span>
+            </div>
+            <a href="gold_knight.glb" download>Download</a>
+        </li>
+        <!-- Add more files here as needed -->
+    </ul>
+
+    <script>
+        // Optional: Add dynamic file listing if needed
+        async function listFiles() {
+            try {
+                const response = await fetch('.');
+                const text = await response.text();
+                // Parse directory contents (implementation depends on server setup)
+                console.log(text);
+            } catch (error) {
+                console.error('Error listing files:', error);
+            }
+        }
+    </script>
+</body>
+</html>
