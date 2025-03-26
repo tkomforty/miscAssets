@@ -5,72 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MiscAssets Directory</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-light: #f4f6f7;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            line-height: 1.6;
+            background-color: var(--background-light);
         }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
         h1 {
-            color: #333;
-            border-bottom: 2px solid #ddd;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 10px;
         }
-        .file-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .file-list li {
-            background-color: #f4f4f4;
-            margin: 10px 0;
+
+        #fileSelector {
+            width: 100%;
             padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
         }
-        .file-list li a {
-            color: #0066cc;
-            text-decoration: none;
-            font-weight: bold;
+
+        #linkDisplay {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: var(--background-light);
+            word-break: break-all;
         }
-        .file-list li a:hover {
-            text-decoration: underline;
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .file-info {
-            color: #666;
-            font-size: 0.9em;
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .copied-message {
+            color: green;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>MiscAssets Directory</h1>
-    
-    <ul class="file-list">
-        <li>
-            <div>
-                <a href="gold_knight.glb">gold_knight.glb</a>
-                <br>
-                <span class="file-info">3D Model</span>
-            </div>
-            <a href="gold_knight.glb" download>Download</a>
-        </li>
-        <!-- Add more files here as needed -->
-    </ul>
+    <div class="container">
+        <h1>MiscAssets Directory</h1>
+        
+        <select id="fileSelector" aria-label="File Selection">
+            <option value="">Select a file</option>
+        </select>
+
+        <input type="text" id="linkDisplay" readonly aria-label="Raw File Link" placeholder="Selected file link will appear here">
+
+        <button id="copyBtn" class="btn" aria-label="Copy Link">
+            Copy Raw Link
+        </button>
+
+        <p id="copiedMessage" class="copied-message">
+            Link copied to clipboard!
+        </p>
+    </div>
 
     <script>
-        // Optional: Add dynamic file listing if needed
-        async function listFiles() {
-            try {
-                const response = await fetch('.');
-                const text = await response.text();
-                // Parse directory contents (implementation depends on server setup)
-                console.log(text);
-            } catch (error) {
-                console.error('Error listing files:', error);
+        // Predefined list of files (update this manually or fetch dynamically)
+        const files = [
+            'GOLD_KNIGHT_1.glb',
+            'gold_knight.glb'
+            // Add more files as they are added to the repository
+        ];
+
+        // DOM Elements
+        const fileSelector = document.getElementById('fileSelector');
+        const linkDisplay = document.getElementById('linkDisplay');
+        const copyBtn = document.getElementById('copyBtn');
+        const copiedMessage = document.getElementById('copiedMessage');
+
+        // Populate dropdown
+        files.forEach(file => {
+            const option = document.createElement('option');
+            option.value = file;
+            option.textContent = file;
+            fileSelector.appendChild(option);
+        });
+
+        // Update link when file is selected
+        fileSelector.addEventListener('change', (e) => {
+            const selectedFile = e.target.value;
+            if (selectedFile) {
+                const rawLink = `https://raw.githubusercontent.com/tkomforty/miscAssets/main/${selectedFile}`;
+                linkDisplay.value = rawLink;
+            } else {
+                linkDisplay.value = '';
             }
-        }
+        });
+
+        // Copy link to clipboard
+        copyBtn.addEventListener('click', () => {
+            if (linkDisplay.value) {
+                // Copy to clipboard
+                navigator.clipboard.writeText(linkDisplay.value).then(() => {
+                    // Show copied message
+                    copiedMessage.style.display = 'block';
+                    
+                    // Hide message after 2 seconds
+                    setTimeout(() => {
+                        copiedMessage.style.display = 'none';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        });
     </script>
 </body>
 </html>
